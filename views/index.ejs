@@ -1,22 +1,26 @@
 <h1>Welcome to CSE Motors</h1>
 
 <section class="hero">
-  <img src="/images/vehicles/delorean.jpg" alt="DeLorean" class="hero-image">
-  <div class="hero-text">
+  <picture class="hero-image">
+    <source media="(min-width: 768px)" srcset="/images/vehicles/delorean.jpg">
+    <img src="/images/vehicles/delorean-tn.jpg" alt="DeLorean">
+  </picture>
+
+  <div class="hero-content">
     <h3>DMC Delorean</h3>
     <ul>
       <li>3 cup holders</li>
       <li>Superman doors</li>
       <li>Fuzzy dice!</li>
     </ul>
-    <button class="button-blue">Own Today</button>
+    <button class="button">Own Today</button>
   </div>
 </section>
 
 <div class="content">
   <section id="reviews">
     <h2>DMC Delorean Reviews</h2>
-    <ul class="open">
+    <ul>
       <li>"So fast it's almost like traveling in time." (4/5)</li>
       <li>"Coolest ride on the road." (4/5)</li>
       <li>"I'm feeling McFly!" (5/5)</li>

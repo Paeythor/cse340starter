@@ -26,6 +26,7 @@ h1, h2, h3 {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 /* ===== Layout Containers ===== */
@@ -121,7 +122,8 @@ header {
 }
 
 /* ===== Buttons ===== */
-.button {
+.button,
+.button-blue {
   display: inline-block;
   background-color: #0055a5;
   color: white;
@@ -132,9 +134,11 @@ header {
   margin-top: 1em;
   cursor: pointer;
   border: none;
+  transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.button:hover,
+.button-blue:hover {
   background-color: #003f7f;
 }
 
@@ -144,56 +148,36 @@ header {
 }
 
 /* ===== Reviews Section ===== */
-.reviews {
+#reviews {
   margin-top: 2em;
   background-color: white;
   padding: 1em;
   border-radius: 10px;
 }
 
-.reviews h3 {
+#reviews h2 {
   margin-top: 0;
 }
 
-.reviews ul {
+#reviews ul {
   padding-left: 1.2em;
 }
 
 /* ===== Upgrades Section ===== */
-.upgrades {
+#upgrades {
   margin-top: 2em;
 }
 
-.upgrades h3 {
+#upgrades h2 {
   margin-top: 0;
 }
 
-.upgrade-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1em;
-  margin-top: 1em;
-}
-
-.upgrade-card {
-  background-color: #00aabb;
-  border-radius: 8px;
-  padding: 1em;
-  text-align: center;
-  color: white;
-}
-
-.upgrade-card img {
-  width: 80px;
-  height: auto;
-  margin-bottom: 0.5em;
-}
-
-/* ===== Gallery Section (Optional/Reusable) ===== */
+/* Use .gallery class for upgrade images grid */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 1em;
+  margin-top: 1em;
 }
 
 .caption-image {
@@ -203,6 +187,7 @@ header {
 .caption-image img {
   width: 100%;
   max-width: 100px;
+  border-radius: 8px;
 }
 
 .caption-image p {
@@ -241,7 +226,7 @@ header {
     text-align: left;
   }
 
-  .upgrade-grid {
+  .gallery {
     grid-template-columns: repeat(2, 1fr);
   }
 }
