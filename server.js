@@ -7,15 +7,15 @@
  *************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-const env = require("dotenv").config()
+require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
-// Index Route
-app.get("/", function(req, res){
-  res.render("index", baseController.buildHome)
-})
 app.use(static)
+// Index Route
+app.get("/", baseController.buildHome)
+
+
 /* ***********************
  * View Engine and Templates
  *************************/
