@@ -11,7 +11,7 @@ require("dotenv").config()
 const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
-app.use(static)
+
 // Index Route
 app.get("/", baseController.buildHome)
 
@@ -21,6 +21,7 @@ app.get("/", baseController.buildHome)
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
+app.use(express.static("public"))
 app.set("layout", "./layouts/layout") // not at views root
 app.use(static)
 
