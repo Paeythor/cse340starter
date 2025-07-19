@@ -1,7 +1,7 @@
-/* ===== Reset & Base ===== */
+/* ===== Reset & Base Styles ===== */
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -28,6 +28,7 @@ img {
   height: auto;
 }
 
+/* ===== Layout Containers ===== */
 .container {
   max-width: 960px;
   margin: 0 auto;
@@ -36,8 +37,8 @@ img {
 
 /* ===== Header ===== */
 header {
-  background-color: #ffffff;
-  color: #222;
+  background-color: #003366;
+  color: white;
   padding: 1em;
   display: flex;
   justify-content: space-between;
@@ -45,14 +46,20 @@ header {
   font-size: 1.2em;
 }
 
-header a {
-  font-size: 0.9em;
-  color: #555;
+.siteName a {
+  text-decoration: none;
+  color: white;
+  font-size: 1.5em;
+}
+
+#tools a {
+  color: #fff;
+  font-weight: bold;
 }
 
 /* ===== Navigation ===== */
 .main-nav {
-  background-color: #111;
+  background-color: #0055a5;
 }
 
 .main-nav ul {
@@ -68,10 +75,11 @@ header a {
   padding: 1em;
   color: white;
   text-align: center;
+  font-weight: bold;
 }
 
 .main-nav li a:hover {
-  background-color: #444;
+  background-color: #003366;
 }
 
 /* ===== Hero Section ===== */
@@ -79,12 +87,16 @@ header a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2em;
   text-align: center;
+  margin: 1em;
+  background-color: #e6f2ff;
+  padding: 1em;
+  border-radius: 10px;
+  gap: 1em;
 }
 
 .hero-content {
-  margin-bottom: 1em;
+  flex: 1;
 }
 
 .hero-content h3 {
@@ -102,18 +114,33 @@ header a {
   margin: 0.25em 0;
 }
 
+.hero-image {
+  flex: 1;
+  max-width: 500px;
+  border-radius: 10px;
+}
+
+/* ===== Buttons ===== */
 .button {
   display: inline-block;
-  background-color: #00aabb;
+  background-color: #0055a5;
   color: white;
-  padding: 0.6em 1.2em;
-  border-radius: 6px;
+  padding: 0.75em 1.5em;
+  border-radius: 5px;
   font-weight: bold;
+  font-size: 1em;
   margin-top: 1em;
+  cursor: pointer;
+  border: none;
 }
 
 .button:hover {
-  background-color: #008899;
+  background-color: #003f7f;
+}
+
+/* ===== Content Sections ===== */
+.content {
+  padding: 1em;
 }
 
 /* ===== Reviews Section ===== */
@@ -162,10 +189,40 @@ header a {
   margin-bottom: 0.5em;
 }
 
+/* ===== Gallery Section (Optional/Reusable) ===== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1em;
+}
+
+.caption-image {
+  text-align: center;
+}
+
+.caption-image img {
+  width: 100%;
+  max-width: 100px;
+}
+
+.caption-image p {
+  margin: 0.5em 0 0;
+}
+
+.caption-image a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #0055a5;
+}
+
+.caption-image a:hover {
+  text-decoration: underline;
+}
+
 /* ===== Footer ===== */
 .site-footer {
-  background-color: #222;
-  color: #fff;
+  background-color: #003366;
+  color: white;
   text-align: center;
   padding: 1em 0;
   margin-top: 2em;
@@ -179,20 +236,9 @@ header a {
     justify-content: center;
   }
 
-  .main-nav li {
-    margin: 0;
-  }
-
   .hero {
     flex-direction: row;
-    justify-content: space-between;
     text-align: left;
-    gap: 2em;
-  }
-
-  .hero-content,
-  .hero-image {
-    flex: 1;
   }
 
   .upgrade-grid {
