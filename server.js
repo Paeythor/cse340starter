@@ -12,10 +12,6 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 
-// Index Route
-app.get("/", baseController.buildHome)
-
-
 /* ***********************
  * View Engine and Templates
  *************************/
@@ -24,7 +20,8 @@ app.use(expressLayouts)
 app.use(express.static("public"))
 app.set("layout", "./layouts/layout") // not at views root
 app.use(static)
-
+// Index Route
+app.get("/", baseController.buildHome)
 
 /* ***********************
  * Local Server Information
