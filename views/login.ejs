@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Your App Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Add your CSS link here -->
+</head>
+<body>
+  <main>
+    <h1>Login</h1>
+
+    <!-- Display Validation Errors -->
+    <% if (errors && errors.length > 0) { %>
+      <div class="error-messages">
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form id="loginForm" action="/account/login" method="post" novalidate>
+      <label for="accountEmail">Email:</label>
+      <input 
+        type="email" 
+        id="accountEmail" 
+        name="account_email" 
+        required 
+        value="<%= locals.account_email || '' %>"
+      >
+
+      <label for="accountPassword">Password:</label>
+      <input 
+        type="password" 
+        id="accountPassword" 
+        name="account_password" 
+        required
+      >
+
+      <button type="submit">Log In</button>
+    </form>
+
+    <p>Don't have an account? <a href="/account/register">Register here</a></p>
+  </main>
+</body>
+</html>
+
