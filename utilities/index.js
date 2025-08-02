@@ -6,10 +6,12 @@ const Util = {}
  ************************** */
 Util.getNav = async function () {
   try {
-    let data = await invModel.getClassifications()
+    let data = await invModel.getClassifications() // assume this returns an array
+
     let list = "<ul>"
     list += '<li><a href="/" title="Home page">Home</a></li>'
-    data.rows.forEach((row) => {
+
+    data.forEach((row) => {
       list += "<li>"
       list +=
         '<a href="/inv/type/' +
@@ -21,13 +23,16 @@ Util.getNav = async function () {
         "</a>"
       list += "</li>"
     })
+
     list += "</ul>"
+
     return list
   } catch (error) {
     console.error("Error building nav:", error)
     throw error
   }
 }
+
 
 /* ****************************************
  * Builds vehicle detail HTML
