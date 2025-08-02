@@ -30,6 +30,32 @@ Util.getNav = async function () {
 }
 
 /* ****************************************
+ * Builds vehicle detail HTML
+ **************************************** */
+Util.buildVehicleDetail = function (vehicle) {
+  const price = vehicle.inv_price.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  })
+
+  const miles = vehicle.inv_miles.toLocaleString("en-US")
+
+  let detail = `
+    <div class="vehicle-detail-container">
+      <img src="${vehicle.inv_image}" alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+      <div class="vehicle-info">
+        <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
+        <p><strong>Price:</strong> ${price}</p>
+        <p><strong>Description:</strong> ${vehicle.inv_description}</p>
+        <p><strong>Color:</strong> ${vehicle.inv_color}</p>
+        <p><strong>Mileage:</strong> ${miles} miles</p>
+      </div>
+    </div>
+  `
+  return detail
+}
+
+/* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 
  * General Error Handling
