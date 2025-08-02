@@ -1,0 +1,38 @@
+<% layout('layouts/layout') %>
+
+<h1>Delete <%= item.inv_make %> <%= item.inv_model %></h1>
+
+<p><strong>Confirm Deletion - This action is permanent and cannot be undone.</strong></p>
+
+<% if (errors && errors.length > 0) { %>
+  <div class="error-messages">
+    <ul>
+      <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<form action="/inv/delete" method="post">
+  <label for="inv_make">Make</label><br>
+  <input type="text" id="inv_make" name="inv_make" readonly 
+         value="<%= item.inv_make %>"><br><br>
+
+  <label for="inv_model">Model</label><br>
+  <input type="text" id="inv_model" name="inv_model" readonly 
+         value="<%= item.inv_model %>"><br><br>
+
+  <label for="inv_year">Year</label><br>
+  <input type="text" id="inv_year" name="inv_year" readonly 
+         value="<%= item.inv_year %>"><br><br>
+
+  <label for="inv_price">Price</label><br>
+  <input type="text" id="inv_price" name="inv_price" readonly 
+         value="<%= item.inv_price %>"><br><br>
+
+  <!-- Hidden field to pass inv_id -->
+  <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+
+  <button type="submit">Delete</button>
+</form>
