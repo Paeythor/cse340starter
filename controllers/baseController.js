@@ -9,7 +9,7 @@ baseController.buildHome = async function(req, res, next) {
       nav
     })
   } catch (error) {
-    next(error) // pass errors to Express error handler
+    next(error) 
   }
 }
 
