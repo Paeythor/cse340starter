@@ -7,7 +7,7 @@ invController.buildByInventoryId = async function (req, res, next) {
   try {
     const inv_id = parseInt(req.params.inv_id)
     const data = await invModel.getInventoryById(inv_id)
-        
+    const vehicle = data    
     if (!vehicle) {
       // Vehicle not found, render error page or 404
       const nav = await utilities.getNav()
