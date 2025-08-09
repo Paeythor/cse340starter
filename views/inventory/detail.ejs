@@ -15,7 +15,7 @@
         <div class="vehicle-detail-container">
             <!-- Vehicle Image Section -->
             <div class="vehicle-image-section">
-                <img src="<%= vehicle.imgPath %>" 
+                <img src="<%= vehicle.inv_image || '/images/no-image.png' %>" 
                      alt="<%= vehicle.inv_year %> <%= vehicle.inv_make %> <%= vehicle.inv_model %>"
                      class="vehicle-main-image">
             </div>
@@ -26,11 +26,15 @@
                 <div class="price-mileage-section">
                     <div class="mileage-display">
                         <span class="mileage-label">Mileage</span>
-                        <span class="mileage-value"><%= vehicle.inv_miles.toLocaleString() %></span>
+                        <span class="mileage-value">
+                            <%= vehicle.inv_miles ? vehicle.inv_miles.toLocaleString() : 'N/A' %>
+                        </span>
                     </div>
                     <div class="price-display">
                         <span class="price-label">No-Haggle Price</span>
-                        <span class="price-value">$<%= vehicle.inv_price.toLocaleString() %></span>
+                        <span class="price-value">
+                            $<%= vehicle.inv_price ? vehicle.inv_price.toLocaleString() : 'N/A' %>
+                        </span>
                     </div>
                 </div>
 
@@ -42,11 +46,13 @@
                     <div class="specs-grid">
                         <div class="spec-item">
                             <span class="spec-label">Mileage:</span>
-                            <span class="spec-value"><%= vehicle.inv_miles.toLocaleString() %></span>
+                            <span class="spec-value"><%= vehicle.inv_miles ? vehicle.inv_miles.toLocaleString() : 'N/A' %></span>
                         </div>
                         <div class="spec-item">
                             <span class="spec-label">MPG:</span>
-                            <span class="spec-value"><%= vehicle.inv_mpg_city %>/<%= vehicle.inv_mpg_highway %> (City/Hwy)</span>
+                            <span class="spec-value">
+                                <%= vehicle.inv_mpg_city || 'N/A' %>/<%= vehicle.inv_mpg_highway || 'N/A' %> (City/Hwy)
+                            </span>
                         </div>
                         <div class="spec-item">
                             <span class="spec-label">Engine:</span>
@@ -108,243 +114,5 @@
 <%- include('../partials/footer') %>
 
 <style>
-/* Vehicle Detail Styles */
-.vehicle-detail-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-}
 
-.vehicle-detail-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
-}
-
-/* Image Section */
-.vehicle-image-section {
-    position: relative;
-}
-
-.vehicle-main-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Info Section */
-.vehicle-info {
-    padding: 20px;
-}
-
-.vehicle-info h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin: 20px 0 15px 0;
-}
-
-/* Price and Mileage Prominent Display */
-.price-mileage-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.mileage-display, .price-display {
-    text-align: center;
-}
-
-.mileage-label, .price-label {
-    display: block;
-    font-size: 0.9rem;
-    color: #666;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.mileage-value {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #333;
-}
-
-.price-value {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: #28a745;
-}
-
-/* Vehicle Specifications Grid */
-.vehicle-specs {
-    margin-bottom: 30px;
-}
-
-.specs-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.spec-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 0.95rem;
-}
-
-.spec-label {
-    font-weight: bold;
-    color: #666;
-}
-
-.spec-value {
-    color: #333;
-}
-
-/* Action Buttons */
-.cta-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.btn {
-    padding: 12px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-align: center;
-    transition: all 0.3s ease;
-    display: inline-block;
-}
-
-.btn-primary {
-    background-color: #28a745;
-    color: white;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #218838;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-.btn-outline {
-    background-color: transparent;
-    color: #6c757d;
-    border: 1px solid #6c757d;
-}
-
-.btn-outline:hover {
-    background-color: #6c757d;
-    color: white;
-}
-
-/* Contact Information */
-.contact-info {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    font-size: 0.9rem;
-}
-
-.contact-section h4 {
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 1rem;
-}
-
-.contact-section a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.contact-section a:hover {
-    text-decoration: underline;
-}
-
-/* Disclaimer */
-.disclaimer {
-    margin-top: 20px;
-    font-size: 0.85rem;
-    color: #666;
-    font-style: italic;
-}
-
-/* Error Notice */
-.notice {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    list-style: none;
-}
-
-.notice li {
-    margin-bottom: 5px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .vehicle-detail-container {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .price-mileage-section {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .specs-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-info {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .vehicle-detail-wrapper {
-        padding: 10px;
-    }
-    
-    .vehicle-info {
-        padding: 10px;
-    }
-    
-    .vehicle-info h2 {
-        font-size: 1.5rem;
-    }
-    
-    .price-value {
-        font-size: 1.8rem;
-    }
-    
-    .mileage-value {
-        font-size: 1.5rem;
-    }
-}
 </style>

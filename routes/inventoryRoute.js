@@ -1,30 +1,28 @@
-const express = require("express")
-const router = new express.Router()
-const invController = require("../controllers/invController")
-const utilities = require("../utilities/") // Needed for error handling
+const express = require("express");
+const router = new express.Router();
+const invController = require("../controllers/invController");
+const utilities = require("../utilities/");
 
-// Route to get inventory by classification ID (e.g., /inv/type/1)
-router.get(
-  "/type/:classificationId",
-  utilities.handleErrors(invController.buildByClassificationId)
-)
+// Inventory routes
+router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
+router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInventoryId));
+router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteView));
+router.post("/delete", utilities.handleErrors(invController.deleteInventory));
 
-// Route to show individual vehicle detail (e.g., /inv/detail/3)
-router.get(
-  "/detail/:inv_id",
-  utilities.handleErrors(invController.buildByInventoryId)
-)
-
-// Route to show delete confirmation page
-router.get(
-  "/delete/:inv_id",
-  utilities.handleErrors(invController.buildDeleteView)
-)
-
-// Route to perform the delete
+router.get("/", utilities.handleErrors(invController.buildManagementView));
+router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
 router.post(
-  "/delete",
-  utilities.handleErrors(invController.deleteInventory)
-)
+  "/add-classification",
+  utilities.classificationRules(),
+  utilities.checkClassificationData,
+  utilities.handleErrors(invController.registerClassification)
+);
+router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
+router.post(
+  "/add",
+  utilities.inventoryRules(),
+  utilities.checkInventoryData,
+  utilities.handleErrors(invController.registerInventory)
+);
 
-module.exports = router
+module.exports = router;

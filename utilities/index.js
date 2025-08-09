@@ -1,18 +1,18 @@
-const invModel = require("../models/inventory-model")
-const Util = {}
+const invModel = require("../models/inventory-model");
+const { body, validationResult } = require("express-validator");
 
-/* ************************
- * Constructs the nav HTML unordered list
- ************************** */
+const Util = {};
+
+
 Util.getNav = async function () {
   try {
-    let data = await invModel.getClassifications()
+    let data = await invModel.getClassifications();
 
-    let list = "<ul>"
-    list += '<li><a href="/" title="Home page">Home</a></li>'
+    let list = "<ul>";
+    list += '<li><a href="/" title="Home page">Home</a></li>';
 
     data.forEach((row) => {
-      list += "<li>"
+      list += "<li>";
       list +=
         '<a href="/inv/type/' +
         row.classification_id +
@@ -20,29 +20,26 @@ Util.getNav = async function () {
         row.classification_name +
         ' vehicles">' +
         row.classification_name +
-        "</a>"
-      list += "</li>"
-    })
+        "</a>";
+      list += "</li>";
+    });
 
-    list += "</ul>"
+    list += "</ul>";
 
-    return list
+    return list;
   } catch (error) {
-    console.error("Error building nav:", error)
-    throw error
+    console.error("Error building nav:", error);
+    throw error;
   }
-}
+};
 
-/* ****************************************
- * Builds vehicle detail HTML
- **************************************** */
 Util.buildVehicleDetail = function (vehicle) {
   const price = vehicle.inv_price.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
-  })
+  });
 
-  const miles = vehicle.inv_miles.toLocaleString("en-US")
+  const miles = vehicle.inv_miles.toLocaleString("en-US");
 
   let detail = `
     <div class="vehicle-detail-container">
@@ -55,47 +52,180 @@ Util.buildVehicleDetail = function (vehicle) {
         <p><strong>Mileage:</strong> ${miles} miles</p>
       </div>
     </div>
-  `
-  return detail
-}
+  `;
+  return detail;
+};
 
-/* ****************************************
- * Builds the classification grid HTML
- **************************************** */
 Util.buildClassificationGrid = async function (data) {
-  let grid
+  let grid;
   if (data.length > 0) {
-    grid = '<ul id="inv-display">'
+    grid = '<ul id="inv-display">';
     data.forEach((vehicle) => {
-      grid += '<li>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id
-        + '" title="View ' + vehicle.inv_make + ' ' + vehicle.inv_model
-        + ' details"><img src="' + vehicle.inv_thumbnail
-        + '" alt="Image of ' + vehicle.inv_make + ' ' + vehicle.inv_model
-        + ' on CSE Motors" /></a>'
-      grid += '<div class="namePrice">'
-      grid += '<hr />'
-      grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id + '" title="View '
-        + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">'
-        + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
-      grid += '</h2>'
-      grid += '<span>$'
-        + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
-      grid += '</div>'
-      grid += '</li>'
-    })
-    grid += '</ul>'
+      grid += '<li>';
+      grid +=
+        '<a href="../../inv/detail/' +
+        vehicle.inv_id +
+        '" title="View ' +
+        vehicle.inv_make +
+        ' ' +
+        vehicle.inv_model +
+        ' details"><img src="' +
+        vehicle.inv_thumbnail +
+        '" alt="Image of ' +
+        vehicle.inv_make +
+        ' ' +
+        vehicle.inv_model +
+        ' on CSE Motors" /></a>';
+      grid += '<div class="namePrice">';
+      grid += "<hr />";
+      grid += "<h2>";
+      grid +=
+        '<a href="../../inv/detail/' +
+        vehicle.inv_id +
+        '" title="View ' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        ' details">' +
+        vehicle.inv_make +
+        " " +
+        vehicle.inv_model +
+        "</a>";
+      grid += "</h2>";
+      grid +=
+        "<span>$" +
+        new Intl.NumberFormat("en-US").format(vehicle.inv_price) +
+        "</span>";
+      grid += "</div>";
+      grid += "</li>";
+    });
+    grid += "</ul>";
   } else {
-    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+    grid = '<p class="notice">Sorry, no matching vehicles could be found.</p>';
   }
-  return grid
-}
+  return grid;
+};
 
-/* ****************************************
- * Middleware For Handling Errors
- **************************************** */
 Util.handleErrors = (fn) => (req, res, next) =>
-  Promise.resolve(fn(req, res, next)).catch(next)
+  Promise.resolve(fn(req, res, next)).catch(next);
 
-module.exports = Util
+/* *****************************
+ * Validation Rules for Classification
+ ******************************* */
+Util.classificationRules = () => {
+  return [
+    body("classification_name")
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage("Classification name is required.")
+      .matches(/^[A-Za-z0-9]+$/)
+      .withMessage("Classification name must be alphanumeric without spaces or special characters."),
+  ];
+};
+
+/* *****************************
+ * Validation Check for Classification
+ ******************************* */
+Util.checkClassificationData = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // send back errors and the entered data to the form
+    return res.status(400).render("inventory/add-classification", {
+      errors: errors.array(),
+      classification_name: req.body.classification_name,
+      title: "Add New Classification",
+      nav: "", // optional: you can build nav if needed
+    });
+  }
+  next();
+};
+
+/* *****************************
+ * Validation Rules for Inventory
+ ******************************* */
+Util.inventoryRules = () => {
+  return [
+    body("classification_id").isInt({ min: 1 }).withMessage("Please select a classification."),
+    body("inv_make").trim().isLength({ min: 1 }).withMessage("Make is required."),
+    body("inv_model").trim().isLength({ min: 1 }).withMessage("Model is required."),
+    body("inv_year")
+      .isInt({ min: 1900, max: new Date().getFullYear() + 1 })
+      .withMessage("Please enter a valid year."),
+    body("inv_description").trim().isLength({ min: 1 }).withMessage("Description is required."),
+    body("inv_image").trim().isLength({ min: 1 }).withMessage("Image path is required."),
+    body("inv_thumbnail").trim().isLength({ min: 1 }).withMessage("Thumbnail path is required."),
+    body("inv_price")
+      .isFloat({ min: 0 })
+      .withMessage("Price must be a positive number."),
+    body("inv_miles")
+      .isInt({ min: 0 })
+      .withMessage("Miles must be a positive integer."),
+    body("inv_color").trim().isLength({ min: 1 }).withMessage("Color is required."),
+  ];
+};
+
+/* *****************************
+ * Validation Check for Inventory
+ ******************************* */
+Util.checkInventoryData = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // Rebuild classification dropdown for sticky form
+    invModel
+      .getClassifications()
+      .then((classifications) => {
+        const classificationSelect = `<select id="classification_id" name="classification_id" required>
+          <option value="">Choose a classification</option>
+          ${classifications
+            .map(
+              (c) =>
+                `<option value="${c.classification_id}" ${
+                  c.classification_id == req.body.classification_id ? "selected" : ""
+                }>${c.classification_name}</option>`
+            )
+            .join("")}
+          </select>`;
+
+        res.status(400).render("inventory/add-inventory", {
+          errors: errors.array(),
+          classificationSelect,
+          title: "Add New Inventory",
+          nav: "", // optional: build nav if needed
+          inv_make: req.body.inv_make,
+          inv_model: req.body.inv_model,
+          inv_year: req.body.inv_year,
+          inv_description: req.body.inv_description,
+          inv_image: req.body.inv_image,
+          inv_thumbnail: req.body.inv_thumbnail,
+          inv_price: req.body.inv_price,
+          inv_miles: req.body.inv_miles,
+          inv_color: req.body.inv_color,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        next(error);
+      });
+    return;
+  }
+  next();
+};
+
+Util.buildClassificationList = async function (selectedId = 0) {
+  let data = await invModel.getClassifications();
+  let list = '<select id="classification_id" name="classification_id" required>';
+  list += '<option value="">Choose a classification</option>';
+
+  data.forEach((classification) => {
+    list += `<option value="${classification.classification_id}"`;
+    if (classification.classification_id === Number(selectedId)) {
+      list += " selected";
+    }
+    list += `>${classification.classification_name}</option>`;
+  });
+
+  list += "</select>";
+  return list;
+};
+
+module.exports = Util;
