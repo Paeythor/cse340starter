@@ -10,7 +10,7 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 // Process login request
 router.post(
   "/login",
-  regValidate.loginRules(),
+  regValidate.loginRules,
   regValidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin)
 )
@@ -21,7 +21,7 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 // Process registration request
 router.post(
   "/register",
-  regValidate.registationRules(),
+  regValidate.registrationRules,
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount)
 )
