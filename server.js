@@ -1,4 +1,4 @@
-/* ******************************************
+/*******************************************
  * This server.js file is the primary file of the 
  * application. It is used to control the project.
  *******************************************/
@@ -8,12 +8,18 @@
  *************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
+const cookieParser = require("cookie-parser") // ✅ NEW: for JWT cookies
 require("dotenv").config()
 const app = express()
 
+// Routes and controllers
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
-const inventoryRoute = require("./routes/inventoryRoute") // ✅ NEW LINE: add inventory routes
+const inventoryRoute = require("./routes/inventoryRoute") // ✅ Inventory routes
+const accountRoute = require("./routes/accountRoute") // ✅ Account routes
+
+// Utilities
+const utilities = require("./utilities/") // ✅ Required for middleware
 
 /* ***********************
  * View Engine and Templates
@@ -21,14 +27,25 @@ const inventoryRoute = require("./routes/inventoryRoute") // ✅ NEW LINE: add i
 app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.use(express.static("public"))
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout") // Not at views root
+
+/* ***********************
+ * Middleware
+ *************************/
+app.use(express.urlencoded({ extended: true })) // ✅ To handle form POST data
+app.use(express.json()) // ✅ To handle JSON
+app.use(cookieParser()) // ✅ Cookie parser for JWT
+app.use(utilities.checkJWTToken) // ✅ JWT checker for every request
+
+// ✅ Static route for general pages (like home, about, etc.)
 app.use(static)
 
-// Index Route
+// ✅ Route for Home
 app.get("/", baseController.buildHome)
 
-// ✅ Use Inventory Routes
+// ✅ Use Inventory and Account Routes
 app.use("/inv", inventoryRoute)
+app.use("/account", accountRoute)
 
 /* ***********************
  * Local Server Information
