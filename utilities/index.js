@@ -1,9 +1,10 @@
 const invModel = require("../models/inventory-model");
 const { body, validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken"); // ✅ Required for JWT auth
 
 const Util = {};
 
-
+// ===== Navigation Builder =====
 Util.getNav = async function () {
   try {
     let data = await invModel.getClassifications();
@@ -33,6 +34,7 @@ Util.getNav = async function () {
   }
 };
 
+// ===== Vehicle Detail Page Builder =====
 Util.buildVehicleDetail = function (vehicle) {
   const price = vehicle.inv_price.toLocaleString("en-US", {
     style: "currency",
@@ -56,6 +58,7 @@ Util.buildVehicleDetail = function (vehicle) {
   return detail;
 };
 
+// ===== Vehicle Grid Builder =====
 Util.buildClassificationGrid = async function (data) {
   let grid;
   if (data.length > 0) {
@@ -106,12 +109,11 @@ Util.buildClassificationGrid = async function (data) {
   return grid;
 };
 
+// ===== Error Handling Wrapper =====
 Util.handleErrors = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
-/* *****************************
- * Validation Rules for Classification
- ******************************* */
+// ===== Validation Rules for Classification =====
 Util.classificationRules = () => {
   return [
     body("classification_name")
@@ -123,26 +125,21 @@ Util.classificationRules = () => {
   ];
 };
 
-/* *****************************
- * Validation Check for Classification
- ******************************* */
+// ===== Validation Check for Classification =====
 Util.checkClassificationData = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // send back errors and the entered data to the form
     return res.status(400).render("inventory/add-classification", {
       errors: errors.array(),
       classification_name: req.body.classification_name,
       title: "Add New Classification",
-      nav: "", // optional: you can build nav if needed
+      nav: "",
     });
   }
   next();
 };
 
-/* *****************************
- * Validation Rules for Inventory
- ******************************* */
+// ===== Validation Rules for Inventory =====
 Util.inventoryRules = () => {
   return [
     body("classification_id").isInt({ min: 1 }).withMessage("Please select a classification."),
@@ -164,13 +161,10 @@ Util.inventoryRules = () => {
   ];
 };
 
-/* *****************************
- * Validation Check for Inventory
- ******************************* */
+// ===== Validation Check for Inventory =====
 Util.checkInventoryData = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // Rebuild classification dropdown for sticky form
     invModel
       .getClassifications()
       .then((classifications) => {
@@ -190,7 +184,7 @@ Util.checkInventoryData = (req, res, next) => {
           errors: errors.array(),
           classificationSelect,
           title: "Add New Inventory",
-          nav: "", // optional: build nav if needed
+          nav: "",
           inv_make: req.body.inv_make,
           inv_model: req.body.inv_model,
           inv_year: req.body.inv_year,
@@ -211,6 +205,7 @@ Util.checkInventoryData = (req, res, next) => {
   next();
 };
 
+// ===== Classification Dropdown Builder =====
 Util.buildClassificationList = async function (selectedId = 0) {
   let data = await invModel.getClassifications();
   let list = '<select id="classification_id" name="classification_id" required>';
@@ -226,6 +221,35 @@ Util.buildClassificationList = async function (selectedId = 0) {
 
   list += "</select>";
   return list;
+};
+
+// ===== JWT Authorization Middleware =====
+Util.checkJWTToken = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    res.locals.loggedin = false;
+    return next();
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+    if (err) {
+      res.locals.loggedin = false;
+      return next();
+    }
+    res.locals.loggedin = true;
+    res.locals.accountData = accountData;
+    next();
+  });
+};
+
+// ===== Login Required Middleware =====
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    return next();
+  } else {
+    req.flash("notice", "Please log in.");
+    return res.redirect("/account/login");
+  }
 };
 
 module.exports = Util;
