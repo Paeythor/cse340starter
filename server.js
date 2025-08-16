@@ -60,3 +60,5 @@ const host = process.env.HOST || 'localhost'
 app.listen(port, () => {
   console.log(`App listening on http://${host}:${port}`)
 })
+// app.use(static)
+app.use("/inv", inventoryRoute)
