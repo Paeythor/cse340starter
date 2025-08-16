@@ -12,13 +12,18 @@ const cookieParser = require("cookie-parser")
 require("dotenv").config()
 const app = express()
 
-// Controllers and Routes
-const baseController = require("./controllers/baseController")
-const inventoryRoute = require("./routes/inventoryRoute")
-const accountRoute = require("./routes/accountRoute")
-
 // Utilities
 const utilities = require("./utilities")
+
+// Middleware to build navigation and set it as a local variable for all views
+app.use(async (req, res, next) => {
+  try {
+    res.locals.nav = await utilities.getNav();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 /* ***********************
  * View Engine and Templates
@@ -39,6 +44,11 @@ app.use(express.static("public"))
 
 // ✅ JWT Middleware
 app.use(utilities.checkJWTToken)
+
+// Controllers and Routes
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute")
 
 // ✅ Home route
 app.get("/", baseController.buildHome)
