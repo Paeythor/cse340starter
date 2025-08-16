@@ -8,57 +8,54 @@
  *************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-const cookieParser = require("cookie-parser") // ✅ NEW: for JWT cookies
+const cookieParser = require("cookie-parser")
 require("dotenv").config()
 const app = express()
 
-// Routes and controllers
-const static = require("./routes/static")
+// Controllers and Routes
 const baseController = require("./controllers/baseController")
-const inventoryRoute = require("./routes/inventoryRoute") // ✅ Inventory routes
-const accountRoute = require("./routes/accountRoute") // ✅ Account routes
+const inventoryRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute")
 
 // Utilities
-const utilities = require("./utilities/") // ✅ Required for middleware
+const utilities = require("./utilities")
 
 /* ***********************
  * View Engine and Templates
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.use(express.static("public"))
-app.set("layout", "./layouts/layout") // Not at views root
+app.set("layout", "./layouts/layout")
 
 /* ***********************
  * Middleware
  *************************/
-app.use(express.urlencoded({ extended: true })) // ✅ To handle form POST data
-app.use(express.json()) // ✅ To handle JSON
-app.use(cookieParser()) // ✅ Cookie parser for JWT
-app.use(utilities.checkJWTToken) // ✅ JWT checker for every request
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(cookieParser())
 
-// ✅ Static route for general pages (like home, about, etc.)
-app.use(static)
+// ✅ Static Files
+app.use(express.static("public"))
 
-// ✅ Route for Home
+// ✅ JWT Middleware
+app.use(utilities.checkJWTToken)
+
+// ✅ Home route
 app.get("/", baseController.buildHome)
 
-// ✅ Use Inventory and Account Routes
+// ✅ Feature routes
 app.use("/inv", inventoryRoute)
 app.use("/account", accountRoute)
 
 /* ***********************
  * Local Server Information
- * Values from .env (environment) file
  *************************/
 const port = process.env.PORT || 3000
-const host = process.env.HOST || 'localhost'
+const host = process.env.HOST || "localhost"
 
 /* ***********************
- * Log statement to confirm server operation
+ * Server Start
  *************************/
 app.listen(port, () => {
   console.log(`App listening on http://${host}:${port}`)
 })
-// app.use(static)
-app.use("/inv", inventoryRoute)
