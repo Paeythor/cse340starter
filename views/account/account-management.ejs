@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
+
+<main>
+  <h1>Account Management</h1>
+  <% if (locals.flash && locals.flash.notice) { %>
+    <div class="notice"><%= flash.notice %></div>
+  <% } %>
+  <p>You're logged in.</p>
+</main>
+
+<%- include('../partials/footer') %>

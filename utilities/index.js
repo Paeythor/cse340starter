@@ -252,4 +252,17 @@ Util.checkLogin = (req, res, next) => {
   }
 };
 
+// ===== Multi-Role Access Middleware =====
+Util.checkAccountTypes = (...allowedTypes) => {
+  return (req, res, next) => {
+    const account = res.locals.accountData;
+    if (account && allowedTypes.includes(account.account_type)) {
+      return next();
+    } else {
+      req.flash("notice", "You do not have permission to access this page.");
+      return res.redirect("/account");
+    }
+  };
+};
+
 module.exports = Util;
