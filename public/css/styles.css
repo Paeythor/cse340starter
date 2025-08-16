@@ -194,28 +194,28 @@ header {
 }
 
 .caption-image {
+  background-color: #0055a5; /* Blue background */
+  padding: 1em;
+  border-radius: 10px;
   text-align: center;
+  color: white;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .caption-image img {
-  width: 100%;
-  max-width: 100px;
-  border-radius: 8px;
+  max-width: 80px;
+  margin: 0 auto;
 }
 
 .caption-image p {
-  margin: 0.5em 0 0;
-}
-
-.caption-image a {
-  text-decoration: none;
+  margin-top: 0.5em;
   font-weight: bold;
-  color: #0055a5;
+  color: white;
 }
 
-.caption-image a:hover {
-  text-decoration: underline;
-}
 
 /* ===== Footer ===== */
 .site-footer,
