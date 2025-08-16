@@ -94,26 +94,16 @@ header {
 }
 
 /* ===== Hero Section ===== */
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 1em auto;
-  background-color: #e6f2ff;
-  padding: 1em;
-  border-radius: 10px;
-  gap: 1em;
-}
-
-.hero-image {
-  flex: 1;
-  max-width: 500px;
-  border-radius: 10px;
-}
-
 .hero-content {
   flex: 1;
+  background-color: rgba(255, 255, 255, 0.85); /* semi-transparent white */
+  padding: 1em;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 400px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(5px);
+
 }
 
 .hero-content h3 {
@@ -130,6 +120,7 @@ header {
 .hero-content ul li {
   margin: 0.25em 0;
 }
+
 
 /* ===== Buttons ===== */
 .button,
