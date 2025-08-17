@@ -295,3 +295,11 @@ footer {
   margin-top: 2em;
   font-size: 0.9em;
 }
+.main-nav ul {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 2em !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  list-style: none !important;
+}
