@@ -92,16 +92,21 @@ header {
   gap: 2em;
 }
 
+.main-nav li {
+  margin: 0;
+}
+
 .main-nav li a {
   display: block;
   padding: 1em;
   color: white;
   font-weight: bold;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .main-nav li a:hover {
-  background-color: #080808;
+  background-color: #003366;
 }
 
 /* ===== Hero Section ===== */
@@ -109,15 +114,22 @@ header {
   position: relative;
   margin: 2em auto;
   max-width: 960px;
-}
-
-.hero-image img {
-  width: 80%;           
-  max-width: 600px;     
-  margin: 0 auto;       
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5em;
+  padding: 1em;
   border-radius: 10px;
 }
 
+.hero-image img {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+/* Default hero content centered (for mobile) */
 .hero-content {
   background-color: rgba(255, 255, 255, 0.85);
   padding: 1em 2em;
@@ -144,8 +156,13 @@ header {
   margin: 0.25em 0;
 }
 
-/* Overlay for large screens */
+/* Overlay hero-content on image for desktop */
 @media screen and (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    justify-content: center;
+  }
+
   .hero-content {
     position: absolute;
     top: 20%;
