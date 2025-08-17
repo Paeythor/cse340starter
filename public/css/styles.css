@@ -81,19 +81,16 @@ header {
 /* ===== Navigation ===== */
 .main-nav {
   background-color: #0055a5;
+  padding: 0;
 }
 
 .main-nav ul {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   gap: 2em;
-}
-
-.main-nav li {
-  margin: 0;
 }
 
 .main-nav li a {
@@ -102,12 +99,15 @@ header {
   color: white;
   font-weight: bold;
   text-align: center;
-  text-transform: uppercase;
+  text-decoration: none;
 }
 
 .main-nav li a:hover {
-  background-color: #003366;
+  background-color: #080808;
+  cursor: pointer;
 }
+
+
 
 /* ===== Hero Section ===== */
 .hero {
