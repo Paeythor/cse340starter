@@ -1,7 +1,9 @@
+const pool = require("../database/")  // Make sure your DB connection is correctly imported
+
 /* **********************
  *   Check for existing email
  * ********************* */
-async function checkExistingEmail(account_email){
+async function checkExistingEmail(account_email) {
   try {
     const sql = "SELECT * FROM account WHERE account_email = $1"
     const email = await pool.query(sql, [account_email])
@@ -10,9 +12,10 @@ async function checkExistingEmail(account_email){
     return error.message
   }
 }
+
 /* *****************************
-* Return account data using email address
-* ***************************** */
+ * Return account data using email address
+ * ***************************** */
 async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
@@ -26,7 +29,45 @@ async function getAccountByEmail(account_email) {
     return new Error("No matching email found")
   }
 }
+
+/* *****************************
+ * Return account data by ID
+ * ***************************** */
+async function getAccountById(id) {
+  const sql = `SELECT * FROM account WHERE account_id = $1`
+  const data = await pool.query(sql, [id])
+  return data.rows[0]
+}
+
+/* *****************************
+ * Update account (name/email)
+ * ***************************** */
+async function updateAccount(id, firstname, lastname, email) {
+  const sql = `UPDATE account 
+               SET account_firstname = $1, account_lastname = $2, account_email = $3 
+               WHERE account_id = $4`
+  const data = await pool.query(sql, [firstname, lastname, email, id])
+  return data.rowCount
+}
+
+/* *****************************
+ * Update password
+ * ***************************** */
+async function updatePassword(id, hashedPassword) {
+  const sql = `UPDATE account 
+               SET account_password = $1 
+               WHERE account_id = $2`
+  const data = await pool.query(sql, [hashedPassword, id])
+  return data.rowCount
+}
+
+/* *****************************
+ * Export functions
+ * ***************************** */
 module.exports = {
   checkExistingEmail,
   getAccountByEmail,
+  getAccountById,
+  updateAccount,
+  updatePassword
 }

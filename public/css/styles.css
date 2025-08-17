@@ -303,3 +303,42 @@ footer {
   margin: 0 auto !important;
   list-style: none !important;
 }
+/* ===== Account Links in Header ===== */
+#tools {
+  display: flex;
+  align-items: center;
+}
+
+.account-links {
+  display: flex;
+  gap: 1em;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-links li {
+  margin: 0;
+}
+
+.account-links a {
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.account-links a:hover {
+  text-decoration: underline;
+}
+
+#tools a {
+  color: #fff;
+  font-weight: bold;
+}
+@media screen and (max-width: 500px) {
+  .account-links {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5em;
+  }
+}
