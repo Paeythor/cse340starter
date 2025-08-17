@@ -283,3 +283,22 @@ footer {
     margin-left: 1em;
   }
 }
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 1em auto;
+  background-color: #e6f2ff;
+  padding: 1em;
+  border-radius: 10px;
+  gap: 1em;
+}
+
+@media screen and (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    text-align: left;
+    gap: 2em;
+  }
+}
